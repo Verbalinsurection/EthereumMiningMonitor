@@ -16,9 +16,7 @@ class Idbc():
         self.last_error = None
         try:
             return self.__client.write_points(data_points)
-        except (ConnectionError, ConnectionRefusedError,
-                ConnectionAbortedError, ConnectionResetError,
-                exceptions.InfluxDBClientError) as e:
+        except (ConnectionError, exceptions.InfluxDBClientError) as e:
             self.last_error = str(e)
             return False
 
@@ -27,8 +25,6 @@ class Idbc():
         try:
             self.__client.drop_database(self.__db)
             self.__client.create_database(self.__db)
-        except (ConnectionError, ConnectionRefusedError,
-                ConnectionAbortedError, ConnectionResetError,
-                exceptions.InfluxDBClientError) as e:
+        except (ConnectionError, exceptions.InfluxDBClientError) as e:
             self.last_error = str(e)
             return False
