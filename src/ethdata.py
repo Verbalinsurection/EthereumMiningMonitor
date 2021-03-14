@@ -7,6 +7,8 @@ from logger import LOG
 
 
 class EthData():
+    __date_time_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+
     def __init__(self, wallet, etherscan_api_key, fiat_code, theorical):
         self.__coin_info = EMF.Coin(fiat_code, 'ethereum')
         self.__pool_info = EMF.Ethermine(wallet, False)
@@ -16,14 +18,14 @@ class EthData():
         self.__status = {}
 
     def update(self):
-        dt_update = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        dt_update = datetime.utcnow().strftime(self.__date_time_format)
 
         try:
             LOG.debug('Update coin info')
             if self.__coin_info.update():
                 self.__status.update(
                     {'coin': self.__coin_info.last_update.strftime(
-                        "%Y-%m-%dT%H:%M:%S.%fZ")})
+                        self.__date_time_format)})
             else:
                 LOG.warning('Update coin info failed: ' +
                             str(self.__coin_info.last_error))
@@ -35,7 +37,7 @@ class EthData():
             if self.__pool_info.update():
                 self.__status.update(
                     {'pool': self.__pool_info.stat_time.strftime(
-                        "%Y-%m-%dT%H:%M:%S.%fZ")})
+                        self.__date_time_format)})
             else:
                 LOG.warning('Update pool info failed: ' +
                             str(self.__pool_info.last_error))
@@ -184,7 +186,7 @@ class EthData():
 
     @property
     def formated_data(self):
-        dt_point = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        dt_point = datetime.utcnow().strftime(self.__date_time_format)
 
         data_points = []
         try:
