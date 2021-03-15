@@ -121,6 +121,7 @@ class EthData():
                     self.__pool_info.next_payout)
         fields['last_payout'] = datetime.isoformat(
                     self.__pool_info.payouts[0].paid_on)
+        fields['last_payout_val'] = self.__pool_info.payouts[0].amount
 
         return {
             'measurement': 'pool',
