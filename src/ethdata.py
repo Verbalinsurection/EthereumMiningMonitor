@@ -119,9 +119,6 @@ class EthData():
         fields['min_payout'] = self.__pool_info.min_payout
         fields['next_payout'] = datetime.isoformat(
                     self.__pool_info.next_payout)
-        fields['last_payout'] = datetime.isoformat(
-                    self.__pool_info.payouts[0].paid_on)
-        fields['last_payout_amount'] = self.__pool_info.payouts[0].amount
 
         return {
             'measurement': 'pool',
@@ -174,6 +171,20 @@ class EthData():
             }
         }
 
+    def __data_payout(self, dt_point, payout):
+        fields = {}
+        fields['amount'] = payout.amount
+
+        return {
+            'measurement': 'payouts',
+            'time': datetime.isoformat(payout.paid_on),
+            'fields': fields,
+            'tags': {
+                'wallet': self.__pool_info.wallet,
+                'pool': self.__pool_info.pool_name,
+            }
+        }
+
     def __data_status(self, dt_point):
         fields = {}
         for entry in self.__status:
@@ -205,6 +216,8 @@ class EthData():
             data_points.append(self.__data_gain_info(
                 dt_point, self.__earn_theorical, 'theorical'))
             self.__status.update({'data': dt_point})
+            for payout in self.__pool_info.payouts:
+                data_points.append(self.__data_payout(dt_point, payout))
             data_points.append(self.__data_status(dt_point))
         except AttributeError as e:
             LOG.error('Unable to create data points: ' + str(e))
