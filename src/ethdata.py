@@ -119,6 +119,7 @@ class EthData():
         fields['min_payout'] = self.__pool_info.min_payout
         fields['next_payout'] = datetime.isoformat(
                     self.__pool_info.next_payout)
+        fields['unpaid_next'] = self.__pool_info.unpaid_at_next
 
         return {
             'measurement': 'pool',

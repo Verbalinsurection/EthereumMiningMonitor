@@ -8,9 +8,10 @@ from config import conf
 from ethdata import EthData
 from influx import Idbc
 from logger import LOG
+import EthMiningFetcher as EMF
 
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 
 def data_process(ethdata, idbc):
@@ -39,9 +40,12 @@ if __name__ == "__main__":
             LOG.critical('Environment variable not set: ' + err)
         exit(1)
 
+    title = 'Ethereum Mining Monitor - ' + __version__
+    fetcher_version = '(fetcher version: ' + EMF.__version__ + ')'
+
     LOG.info('╔' + '═' * 78 + '╗')
-    LOG.info('║' + 'Ethereum Mining Monitor'.center(78, ' ') + '║')
-    LOG.info('║' + __version__.center(78, ' ') + '║')
+    LOG.info('║' + title.center(78, ' ') + '║')
+    LOG.info('║' + fetcher_version.center(78, ' ') + '║')
     LOG.info('╟' + '─' * 78 + '╢')
     for confentry in conf.conf_array:
         LOG.info('║ ' + confentry[0].ljust(18) +
