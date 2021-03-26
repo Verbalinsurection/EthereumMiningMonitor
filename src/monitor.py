@@ -11,7 +11,7 @@ from logger import LOG
 import EthMiningFetcher as EMF
 
 
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 
 def data_process(ethdata, idbc):
@@ -28,6 +28,18 @@ def data_process(ethdata, idbc):
 
     LOG.debug('Writing data to InfluxDb')
     if not idbc.write_data(formated_data):
+        LOG.error('Error on writing data to InfluxDb')
+        LOG.error(idbc.last_error)
+
+    formated_payouts = ethdata.formated_payouts
+    if formated_payouts is None:
+        LOG.error('No payouts data for InfluxDb')
+        return
+    for data_line in formated_payouts:
+        LOG.debug(data_line)
+
+    LOG.debug('Writing payouts data to InfluxDb')
+    if not idbc.write_data(formated_payouts, 'daily'):
         LOG.error('Error on writing data to InfluxDb')
         LOG.error(idbc.last_error)
 
@@ -71,7 +83,7 @@ if __name__ == "__main__":
     schedule.every(conf.schedule_update).seconds.do(data_process,
                                                     ethdata,
                                                     idbc)
-    # TODO: add downsampling
+
     while True:
         schedule.run_pending()
         sleep(1)
