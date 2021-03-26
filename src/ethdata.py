@@ -78,7 +78,7 @@ class EthData():
     def __data_wallet(self, dt_point):
         fields = {}
         fields['balance_eth'] = self.__wallet_info.balance
-        fields['balance-fiat'] = round(
+        fields['balance_fiat'] = round(
             self.__wallet_info.balance * self.__coin_info.price, 2)
 
         return {
@@ -217,9 +217,21 @@ class EthData():
             data_points.append(self.__data_gain_info(
                 dt_point, self.__earn_theorical, 'theorical'))
             self.__status.update({'data': dt_point})
+            data_points.append(self.__data_status(dt_point))
+        except AttributeError as e:
+            LOG.error('Unable to create data points: ' + str(e))
+            return None
+
+        return data_points
+
+    @property
+    def formated_payouts(self):
+        dt_point = datetime.utcnow().strftime(self.__date_time_format)
+
+        data_points = []
+        try:
             for payout in self.__pool_info.payouts:
                 data_points.append(self.__data_payout(dt_point, payout))
-            data_points.append(self.__data_status(dt_point))
         except AttributeError as e:
             LOG.error('Unable to create data points: ' + str(e))
             return None
