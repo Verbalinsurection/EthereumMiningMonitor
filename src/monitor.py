@@ -11,7 +11,7 @@ from logger import LOG
 import EthMiningFetcher as EMF
 
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 
 def data_process(ethdata, idbc):
