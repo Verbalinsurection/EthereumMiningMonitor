@@ -40,6 +40,17 @@ Python script to track your mining informations and push to InfluxDb
   - Reported hashrate, actual, historical data over 3 range, shares
   - Workers informations
 
+### InfluxDb downsampling
+
+The app automatically create all the needs for downsampling data:
+
+- Create *daily* policy with infinite retention
+- Update *autogen* policy with 40 days retention
+- Create 2 continuous query:
+  - Downsampling mining gain (daily eth gain)
+  - Downsampling wallet value (daily eth and fiat value)
+If policy or continuous query is manually modified, the app ovewrite them.
+
 ## Python informations
 
 ### Version
@@ -85,7 +96,6 @@ Write using Python 3.9
 
 ## :construction: Things to do
 
-- Add downsampling InfluxDb
 - More things...
 
 ## Yeah :wink: you can donate but there is no real reson to do this
