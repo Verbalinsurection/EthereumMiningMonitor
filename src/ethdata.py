@@ -13,7 +13,7 @@ class EthData():
         self.__coin_info = EMF.Coin(fiat_code, 'ethereum')
         self.__pool_info = EMF.Ethermine(wallet, False)
         self.__wallet_info = EMF.EtherWallet(etherscan_api_key, wallet)
-        self.__earn_calc = EMF.CoinCalculators('ethereum')
+        self.__earn_calc = EMF.WhatToMine()
         self.__theorical = theorical
         self.__status = {}
 
